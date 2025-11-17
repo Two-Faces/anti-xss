@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use voku\helper\AntiXSS;
 use voku\helper\UTF8;
 
@@ -1038,11 +1039,7 @@ HTML;
     public function testSvgXssFileV1()
     {
         $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/xss_v1.svg');
-        if (\PHP_VERSION_ID < 80100) {
-            $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/xss_v1_clean.svg');
-        } else {
-            $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/xss_v1_clean_php81.svg');
-        }
+        $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/xss_v1_clean.svg');
 
         static::assertSame(
             \str_replace(["\n\r", "\r\n", "\n"], "\n", $resultString),
@@ -1638,9 +1635,8 @@ nodeValue+outerHTML>/*click me', $str);
         static::assertSame('<img src="b on=">on=">"x ="alert&#40;1&#41;">', (new AntiXSS())->xss_clean('<img src="b on="<x">on=">"x onerror="alert(1)">'));
     }
     
-    /**
-     * @dataProvider _dataForXssCleanSanitizeNaughtyJavascript
-     */
+
+    #[DataProvider('_dataForXssCleanSanitizeNaughtyJavascript')]
     public function testXssCleanSanitizeNaughtyJavascript(string $contentToFilter, bool $expectedFindXss)
     {
         // Arrange
@@ -1659,7 +1655,7 @@ nodeValue+outerHTML>/*click me', $str);
         }
     }
 
-    public function _dataForXssCleanSanitizeNaughtyJavascript(): array
+    public static function _dataForXssCleanSanitizeNaughtyJavascript(): array
     {
         return [
             // no XSS
@@ -1679,9 +1675,7 @@ nodeValue+outerHTML>/*click me', $str);
         ];
     }
 
-    /**
-     * @dataProvider _dataForXssXssCleanNeverAllowedAfterwards
-     */
+    #[DataProvider('_dataForXssXssCleanNeverAllowedAfterwards')]
     public function testXssCleanNeverAllowedAfterwards(string $contentToFilter, bool $expectedFindXss)
     {
         // Arrange
@@ -1700,7 +1694,7 @@ nodeValue+outerHTML>/*click me', $str);
         }
     }
 
-    public function _dataForXssXssCleanNeverAllowedAfterwards(): array
+    public static function _dataForXssXssCleanNeverAllowedAfterwards(): array
     {
         return [
             'valid string without attribute XSS #5' => ['<p>onend</p>', false],
