@@ -1,5 +1,5 @@
 {
-  "name": "charly66/anti-xss",
+  "name": "two-faces/anti-xss",
   "description": "anti xss-library",
   "type": "library",
   "keywords": [
@@ -8,7 +8,7 @@
     "security",
     "xss"
   ],
-  "homepage": "https://github.com/Charly66/anti-xss",
+  "homepage": "https://github.com/Two-Faces/anti-xss",
   "license": "MIT",
   "authors": [
     {
